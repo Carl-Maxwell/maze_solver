@@ -1,6 +1,5 @@
 
-require "./mapunit"
-require "./pathfind"
+require_relative "mapunit"
 
 class Map
 	attr_accessor :width, :height, :nodes
@@ -61,18 +60,3 @@ class Map
 		end
 	end
 end
-
-m = Map.new(26,10)
-# m = Map.new(2,2)
-
-print "Triangulating the osscilating motion of ultimate doom!\n"
-
-m.generate()
-
-print "The map has been generated!\n"
-
-print m.display
-
-print "Fixing foot upon the path of ultimate victory!\n"
-
-# print m.pathfind

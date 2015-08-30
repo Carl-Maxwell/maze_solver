@@ -67,19 +67,21 @@ class Pathfinder
   end
 
   def run
-    log = []
+    # log = []
     while self.memory.coords.length < self.maze.to_a.flatten.length
-      system("clear")
-      puts self.maze.to_s( {
+      output = self.maze.to_s( {
         self.position.to_a => "P".on_red,
         self.goal.to_a => "G".on_green,
         self.stop.to_a => "E".on_cyan,
         self.stop.to_a => "S".blue
       } )
+
+      system("clear")
+      puts output
       self.tick
-      log << [self.position.to_a, self.goal.to_a]
+      # log << [self.position.to_a, self.goal.to_a]
       #puts log.map(&:inspect).join("\n")
-      sleep(0.2)
+      # sleep(0.2)
     end
   end
 

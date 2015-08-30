@@ -15,7 +15,15 @@ class Maze
     [].tap do |map|
       File.open(filename) do |f|
         until f.eof?
-          map << MazeRow.new( f.gets.chars.map { |tile| tile != "*" } )
+          map << MazeRow.new( f.gets.chars.map do |tile|
+            if tile == " "
+              true
+            elsif tile == "S"
+              # start
+            elsif tile == "E"
+              # goal
+            end
+          end )
         end
       end
     end
@@ -66,7 +74,7 @@ class Maze
     end
 
     def to_s
-      row.map { |tile| tile ? " " : "*" }.join("")
+      row.map { |tile| tile ? " " : "\u2588" }.join("")
     end
 
     def to_a

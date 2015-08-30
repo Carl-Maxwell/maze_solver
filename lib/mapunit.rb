@@ -34,7 +34,7 @@ class MapUnit
 		@filled = true
 
 		case direction
-		when :up 
+		when :up
 			@up = false
 			self.up.open(:down, false) if recursive
 			self.up
