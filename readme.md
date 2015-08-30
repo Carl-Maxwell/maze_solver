@@ -5,6 +5,14 @@ it is complete as an exercise but not super friendly to use.
 to see it in action do
 
 ```bash
+ruby lib/maze_solver.rb
+```
+
+By default it'll generate a new map, but if you want to provide it with a map,
+whether one you wrote or one it generated previously, just specify the
+filename:
+
+```bash
 ruby lib/maze_solver.rb "mazes/maze02"
 ```
 
