@@ -1,7 +1,7 @@
 require './pathfinder_memory'
-require './vector'
+require './libraries/vector'
 require './pathpicker'
-require './weighted_sample'
+require './libraries/weighted_sample'
 
 class Pathfinder
   attr_accessor :position, :stop, :goal, :path

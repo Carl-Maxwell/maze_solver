@@ -1,6 +1,6 @@
 require 'set'
-require './tree_node'
-require './vector'
+require './libraries/tree_node'
+require './libraries/vector'
 
 class PathPicker
   attr_accessor :visited_positions, :move_tree, :valid_positions
