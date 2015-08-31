@@ -29,8 +29,8 @@ class Map
 			end
 		end
 
-		lines[-2][-2] = "x"
-		lines[1][1]   = "b"
+		lines[-2][-2] = "S"
+		lines[1][1]   = "E"
 
 		lines.join("\n").gsub("*", "\u2588") + "\n"
 	end

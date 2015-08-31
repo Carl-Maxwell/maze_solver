@@ -5,10 +5,10 @@ class Maze
   attr_reader :memory, :height, :width
 
   def initialize(filename, memory)
-    @rows = open_file(filename)
+    @rows   = open_file(filename)
     @memory = memory
     @height = @rows.length
-    @width = @rows[0].length
+    @width  = @rows[0].length
   end
 
   def open_file(filename)
@@ -20,8 +20,10 @@ class Maze
               true
             elsif tile == "S"
               # start
+              true
             elsif tile == "E"
               # goal
+              true
             end
           end )
         end
@@ -38,7 +40,7 @@ class Maze
     self[row][col]
   end
 
-  def to_s(special_characters = {})
+  def render(special_characters = {})
     lines = rows.map(&:to_s)
     lines = lines.map.with_index do |row, row_index|
       row.split("").map.with_index do |col, col_index|

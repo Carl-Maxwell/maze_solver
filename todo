@@ -2,4 +2,5 @@
 
 
 * pull in ncurses?
-*
+* weighted_sample should take in an array for the weights,
+  * should feed it in the path lenght to get to the points

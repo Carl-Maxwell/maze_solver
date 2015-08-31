@@ -2,6 +2,7 @@ require_relative 'pathfinder_memory'
 require_relative 'libraries/vector'
 require_relative 'pathpicker'
 require_relative 'libraries/weighted_sample'
+require 'byebug'
 
 class Pathfinder
   attr_accessor :position, :stop, :goal, :path
@@ -22,21 +23,27 @@ class Pathfinder
     @path = []
   end
 
-  def pick_goal
-    pool = self.memory.frontier
+  def valid_tiles
+    @valid_tiles ||= (self.memory.coords + self.memory.frontier)
+    .select { |coord| self.maze.at(coord) }
+  end
 
-    pool = pool.sort_by { |coord| self.position.distance(Vector.new(coord)) }
+  def pick_goal
+    picker = PathPicker.new(self.position.to_a, valid_tiles)
+
+    pool = self.memory.frontier.select do |coord|
+      picker.find_path(coord)
+    end
+
+    pool = pool.shuffle.sort_by { |coord| picker.find_path(coord).length }
 
     self.goal = Vector.new(pool.weighted_sample)
   end
 
   def pick_path
-    pick_goal
+    @valid_tiles = nil
 
-    valid_tiles = (
-      self.memory.coords.select { |coord| self.maze.at(coord) } +
-      self.memory.frontier
-    )
+    pick_goal
 
     picker = PathPicker.new(self.position.to_a, valid_tiles)
 
@@ -46,6 +53,8 @@ class Pathfinder
       self.path = maybe_path[1..-1]
     else
       pick_path
+      # debugger
+      # raise "Error! Failed to find a path!"
     end
   end
 
@@ -67,9 +76,8 @@ class Pathfinder
   end
 
   def run
-    # log = []
     while self.memory.coords.length < self.maze.to_a.flatten.length
-      output = self.maze.to_s( {
+      output = self.maze.render( {
         self.position.to_a => "P".on_red,
         self.goal.to_a => "G".on_green,
         self.stop.to_a => "E".on_cyan,
@@ -79,8 +87,6 @@ class Pathfinder
       system("clear")
       puts output
       self.tick
-      # log << [self.position.to_a, self.goal.to_a]
-      #puts log.map(&:inspect).join("\n")
       # sleep(0.2)
     end
   end
