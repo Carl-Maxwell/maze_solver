@@ -1,6 +1,9 @@
 
 
-
-* pull in ncurses?
 * weighted_sample should take in an array for the weights,
-  * should feed it in the path lenght to get to the points
+  * should feed it in the path length to get to the points
+* improve performance
+  => searching for a new goal definitely seems to have a bad big-oh complexity
+* after exploring the entire maze,
+  calculate the fastest path through it, and display that path.
+* pull in ncurses?

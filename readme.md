@@ -1,8 +1,6 @@
-This is a simple pathfinding project
+This is a maze generator and solver.
 
-it is complete as an exercise but not super friendly to use.
-
-to see it in action do
+To see it in action do
 
 ```bash
 ruby lib/maze_solver.rb
@@ -16,14 +14,18 @@ filename:
 ruby lib/maze_solver.rb "mazes/maze02"
 ```
 
-and watch your pf search his way to ultimate victory.
+And watch your pathfinder search his way to ultimate victory.
 
 When you tire of watching, use ctrl+c to exit out.
 
 ## Maze Generation
 
-
+Uses [Prim's Algorithm](http://weblog.jamisbuck.org/2011/1/10/maze-generation-prim-s-algorithm)
+to generate mazes.
 
 ## Pathfinding
 
-Looks at the 'frontier' (unexplored tiles adjacent to explored tiles)
+While exploring, the pathfinder looks at the 'frontier' (unexplored tiles
+adjacent to explored tiles), sorts them by how far away they are, then chooses
+a goal from among them using a weighted sampling technique (such that nearer
+points are more likely to be chosen).
