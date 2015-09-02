@@ -1,6 +1,6 @@
 # Maze Generator and Solver
 
-![screenshot of maze generator and solver](http://i.imgur.com/GeVaZQ6.png)
+![screenshot of maze generator and solver](http://i.imgur.com/S0qKukJ.png)
 
 This projects combines a maze generator with a maze solver.
 
