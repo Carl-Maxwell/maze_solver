@@ -1,4 +1,8 @@
-This is a maze generator and solver.
+# Maze Generator and Solver
+
+![screenshot of maze generator and solver](http://i.imgur.com/GeVaZQ6.png)
+
+This projects combines a maze generator with a maze solver.
 
 To see it in action do
 
