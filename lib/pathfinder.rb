@@ -31,13 +31,21 @@ class Pathfinder
   def pick_goal
     picker = PathPicker.new(self.position.to_a, valid_tiles)
 
-    pool = self.memory.frontier.select do |coord|
-      picker.find_path(coord)
-    end
+    # pool = self.memory.frontier.select do |coord|
+    #   picker.find_path(coord)
+    # end
 
-    pool = pool.shuffle.sort_by { |coord| picker.find_path(coord).length }
+    # weights = pool.dup.map { |coord| picker.find_path(coord).length }
+    # w = weights.max
 
-    self.goal = Vector.new(pool.weighted_sample)
+    # weights.map! { |l| 1 + (w - l) }
+
+    # self.goal = Vector.new(pool.weighted_sample(weights))
+
+    self.goal = Vector.new(self.memory.frontier.min_by { |coord|
+      p = picker.find_path(coord)
+      p ? p.length : Float::INFINITY
+    } )
   end
 
   def pick_path
@@ -46,15 +54,12 @@ class Pathfinder
     pick_goal
 
     picker = PathPicker.new(self.position.to_a, valid_tiles)
-
     maybe_path = picker.find_path(self.goal.to_a)
 
     if maybe_path
       self.path = maybe_path[1..-1]
     else
       pick_path
-      # debugger
-      # raise "Error! Failed to find a path!"
     end
   end
 
@@ -77,12 +82,14 @@ class Pathfinder
 
   def run
     while self.memory.coords.length < self.maze.to_a.flatten.length
-      output = self.maze.render( {
-        self.position.to_a => "P".on_red,
-        self.goal.to_a => "G".on_green,
-        self.stop.to_a => "E".on_cyan,
-        self.stop.to_a => "S".blue
-      } )
+      special_chars = self.memory.frontier.dup.select { |coord| self.maze.at(coord) }
+      special_chars = Hash[special_chars.collect { |v| [v, " ".on_green] }]
+      output = self.maze.render( special_chars.merge( {
+        self.goal.to_a     => "G".on_green,
+        self.stop.to_a     => "E".on_cyan,
+        self.stop.to_a     => "S".blue,
+        self.position.to_a => "P".on_red
+      } ) )
 
       system("clear")
       puts output

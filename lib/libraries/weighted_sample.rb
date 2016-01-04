@@ -1,3 +1,5 @@
+require 'json'
+
 class Array
   def weighted_sample(weights = nil)
     if !weights
@@ -19,23 +21,35 @@ class Array
 
       self[ thing ]
     else
-      raise 'Error! Weighted sample does not take an argument (yet)'
-
       total = 0
-      weights.map! do |weight|
-        total += weight
+
+      # puts self.to_json
+      # puts weights.to_json
+      # debugger if length > 3
+
+      weights.each do |weight|
+        if weight == 0
+          nil
+        else
+          total += weight
+        end
       end
 
-      puts weights
+      # puts weights.to_json
 
-      choice = rand(total)
+      choice = rand(0..total)
 
-      puts choice
+      # puts "#{choice}/#{total}"
 
-      weights.each.with_index do |thing, i|
-        return self[i] if choice <= thing
+      weights.each.with_index do |chance, i|
+        next if chance.nil?
 
-        choice -= thing
+        choice -= chance
+
+        # puts "#{i}: #{choice} < #{chance} out of #{total}"
+
+        # puts i if choice <= 0
+        return self[i] if choice <= 0
       end
     end
   end
