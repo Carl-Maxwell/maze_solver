@@ -1,9 +1,14 @@
 class PathfinderMemory
-  attr_accessor :memory, :width, :height
+  attr_accessor :memory, :width, :height, :frontier
 
   def initialize(initial_value = false)
     @memory = {}
-    memory[initial_value] = true if initial_value
+    @frontier = []
+
+    if initial_value
+      memory[initial_value] = true
+    end
+
   end
 
   def [](row_index)
@@ -21,21 +26,39 @@ class PathfinderMemory
 
   def fill(row, column)
     set_at(row, column, true)
-  end
 
-  def frontier
+    frontier.delete [row, column]
+
     visited = memory.keys
 
-    # get coords adjacent to visited elements that are not in visited
-    frontier = []
-    visited.each { |coord| frontier.concat(adjacent(coord)) }
-    frontier
+    adj = adjacent([row, column])
       .reject { |tile| visited.include?(tile) }
       .reject do |coord|
-        next true if coord.any? { |e| e < 0 }
+        next true if coord.any? { |e| e <= 0 }
         coord[0] > height || coord[1] > width
       end
+
+    frontier.concat(adj)
   end
+
+  # def frontier
+  #   # visited = memory.keys
+  #
+  #   # get coords adjacent to visited elements that are not in visited
+  #
+  #   # frontier = []
+  #   # visited.each do |coord|
+  #   #   adj = adjacent(coord).reject { |tile| visited.include?(tile) }
+  #   #   .reject do |coord|
+  #   #     next true if coord.any? { |e| e < 0 }
+  #   #     coord[0] > height || coord[1] > width
+  #   #   end
+  #   #
+  #   #   frontier.concat(adj)
+  #   # end
+  #
+  #   @frontier
+  # end
 
   def coords
     @memory.keys

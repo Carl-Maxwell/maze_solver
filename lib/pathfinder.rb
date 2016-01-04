@@ -20,6 +20,8 @@ class Pathfinder
     @memory.width  = @maze.width
     @memory.height = @maze.height
 
+    @memory.fill(*start)
+
     @path = []
   end
 
@@ -81,7 +83,14 @@ class Pathfinder
   end
 
   def run
+    this_frame_timestamp = Time.now.to_f
+
     while self.memory.coords.length < self.maze.to_a.flatten.length
+      last_frame_timestamp = this_frame_timestamp
+      this_frame_timestamp = Time.now.to_f
+
+      time = this_frame_timestamp - last_frame_timestamp
+
       special_chars = self.memory.frontier.dup.select { |coord| self.maze.at(coord) }
       special_chars = Hash[special_chars.collect { |v| [v, " ".on_green] }]
       output = self.maze.render( special_chars.merge( {
@@ -90,6 +99,8 @@ class Pathfinder
         self.stop.to_a     => "S".blue,
         self.position.to_a => "P".on_red
       } ) )
+
+      output += "\n#{time} seconds\n"
 
       system("clear")
       puts output
