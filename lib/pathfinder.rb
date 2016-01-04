@@ -30,39 +30,17 @@ class Pathfinder
     .select { |coord| self.maze.at(coord) }
   end
 
-  def pick_goal
-    picker = PathPicker.new(self.position.to_a, valid_tiles)
-
-    # pool = self.memory.frontier.select do |coord|
-    #   picker.find_path(coord)
-    # end
-
-    # weights = pool.dup.map { |coord| picker.find_path(coord).length }
-    # w = weights.max
-
-    # weights.map! { |l| 1 + (w - l) }
-
-    # self.goal = Vector.new(pool.weighted_sample(weights))
-
-    self.goal = Vector.new(self.memory.frontier.min_by { |coord|
-      p = picker.find_path(coord)
-      p ? p.length : Float::INFINITY
-    } )
-  end
-
   def pick_path
     @valid_tiles = nil
 
-    pick_goal
+    picker = PathPicker.new(position.to_a, valid_tiles)
 
-    picker = PathPicker.new(self.position.to_a, valid_tiles)
-    maybe_path = picker.find_path(self.goal.to_a)
+    full_path = picker.find_target_and_path(position.to_a, memory.frontier)
 
-    if maybe_path
-      self.path = maybe_path[1..-1]
-    else
-      pick_path
-    end
+    self.path = full_path[1..-1]
+    self.goal = full_path[0]
+
+    path
   end
 
   def tick
@@ -70,7 +48,6 @@ class Pathfinder
       pick_path
     end
 
-    # step = self.position + Vector.new(step_towards(self.position, self.path.shift))
     step = self.path.shift
 
     memory.fill( *step )
