@@ -37,8 +37,8 @@ class Pathfinder
 
     full_path = picker.find_target_and_path(position.to_a, memory.frontier)
 
+    self.goal = full_path[-1]
     self.path = full_path[1..-1]
-    self.goal = full_path[0]
 
     path
   end
@@ -68,8 +68,9 @@ class Pathfinder
 
       time = this_frame_timestamp - last_frame_timestamp
 
-      special_chars = self.memory.frontier.dup.select { |coord| self.maze.at(coord) }
+      special_chars = memory.frontier.dup.select { |coord| maze.at(coord) }
       special_chars = Hash[special_chars.collect { |v| [v, " ".on_green] }]
+
       output = self.maze.render( special_chars.merge( {
         self.goal.to_a     => "G".on_green,
         self.stop.to_a     => "E".on_cyan,
